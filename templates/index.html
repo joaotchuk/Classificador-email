@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Classificação de Emails</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        textarea { width: 100%; height: 120px; }
+        .resultado { margin-top: 20px; padding: 10px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+    <h1>Classificação de Emails</h1>
+    <form method="post">
+        <label for="email_text">Cole o conteúdo do email:</label><br>
+        <textarea name="email_text" required></textarea><br><br>
+        <button type="submit">Classificar</button>
+    </form>
+
+    {% if categoria %}
+    <div class="resultado">
+        <h3>Resultado:</h3>
+        <p><b>Email:</b> {{ email }}</p>
+        <p><b>Categoria:</b> {{ categoria }}</p>
+        <p><b>Resposta sugerida:</b> {{ resposta }}</p>
+    </div>
+    {% endif %}
+</body>
+</html>

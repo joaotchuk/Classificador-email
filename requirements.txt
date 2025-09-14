@@ -1,5 +1,4 @@
-Flask
-scikit-learn
-nltk
-joblib
-PyPDF2
+Flask==3.1.2
+gunicorn
+transformers==4.56.1
+torch==2.8.0
