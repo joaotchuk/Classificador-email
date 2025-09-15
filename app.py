@@ -3,23 +3,28 @@ from transformers import pipeline
 
 app = Flask(__name__)
 
-# 🔹 Carrega o classificador Hugging Face
 classifier = pipeline("zero-shot-classification", model="facebook/bart-large-mnli")
 
 def classificar_email(texto_email):
-    labels = ["Produtivo", "Improdutivo"]
+    texto_lower = texto_email.lower()
 
-    hypothesis_template = (
-        "Este email deve ser classificado como {} "
-        "apenas se corresponder exatamente à definição: "
-        "- PRODUTIVO: quando pede atualização, solicita ação, ou requer resposta objetiva. "
-        "- IMPRODUTIVO: quando é felicitação, agradecimento, cumprimento ou mensagem sem ação."
-    )
+    palavras_produtivo = ["suporte", "ajuda", "problema", "erro", "conta", "acessar", "login", "senha", "status", "solicitação","fatura","conta"]
+    palavras_improdutivo = ["obrigado", "agradeço", "feliz", "parabéns", "bom dia", "boa tarde", "boa noite"]
 
-    resultado = classifier(texto_email, labels, hypothesis_template=hypothesis_template)
-    categoria = resultado["labels"][0]
+    if any(p in texto_lower for p in palavras_produtivo):
+        categoria = "Produtivo"
+    elif any(p in texto_lower for p in palavras_improdutivo):
+        categoria = "Improdutivo"
+    else:
+        labels = ["Produtivo", "Improdutivo"]
+        hypothesis_template = (
+            "Este email deve ser considerado {}. "
+            "- PRODUTIVO: quando solicita ajuda, pede suporte, traz problema, pede status ou ação concreta. "
+            "- IMPRODUTIVO: quando é apenas agradecimento, felicitação, cumprimento ou mensagem sem necessidade de resposta."
+        )
+        resultado = classifier(texto_email, labels, hypothesis_template=hypothesis_template)
+        categoria = resultado["labels"][0]
 
-    # 🔹 Resposta sugerida
     if categoria == "Produtivo":
         resposta = "✅ Entendido. Vamos processar sua solicitação e retornaremos em breve."
     else:
@@ -30,19 +35,14 @@ def classificar_email(texto_email):
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    resultado = None
+    email = categoria = resposta = None
     if request.method == "POST":
         email_texto = request.form["email_texto"]
         categoria, resposta = classificar_email(email_texto)
-        resultado = {
-            "email": email_texto,
-            "categoria": categoria,
-            "resposta": resposta
-        }
-    return render_template("index.html", resultado=resultado)
+        email = email_texto
+    return render_template("index.html", email=email, categoria=categoria, resposta=resposta)
 
 
 if __name__ == "__main__":
     app.run(debug=True)
-
 
