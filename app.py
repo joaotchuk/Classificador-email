@@ -1,45 +1,51 @@
-from flask import Flask, render_template, request
-from transformers import pipeline
-
-# Inicializa o pipeline do Hugging Face
-pipe = pipeline("sentiment-analysis")
+import os
+import requests
+from flask import Flask, request, render_template
 
 app = Flask(__name__)
 
-# Função de classificação com regras híbridas
-def classificar_email(text):
-    palavras_produtivas = [
-        "enviar", "acesso", "preciso", "atualizar",
-        "ajuda", "dificuldade", "solicitação", "suporte",
-        "status", "problema", "erro", "funcionar"
-    ]
+# Pegue o token do Hugging Face via variável de ambiente
+HF_API_TOKEN = os.getenv("HF_API_TOKEN")
 
-    # Se encontrar uma palavra produtiva → classifica direto
-    if any(p in text.lower() for p in palavras_produtivas):
-        categoria = "Produtivo"
-        resposta = "Obrigado pelo contato! Sua solicitação será analisada e retornaremos em breve."
-        return categoria, resposta
+# Modelo escolhido na Hugging Face
+MODEL_ID = "distilbert-base-uncased-finetuned-sst-2-english"
 
-    # Caso contrário, usa o modelo de sentimento
-    resultado = pipe(text)[0]["label"]
+API_URL = f"https://api-inference.huggingface.co/models/{MODEL_ID}"
+HEADERS = {"Authorization": f"Bearer {HF_API_TOKEN}"}
 
-    if resultado == "POSITIVE":
-        categoria = "Improdutivo"
-        resposta = "Agradecemos a sua mensagem!"
-    else:
-        categoria = "Improdutivo"
-        resposta = "Mensagem recebida. Obrigado pelo contato!"
-    
-    return categoria, resposta
+
+def query(payload):
+    response = requests.post(API_URL, headers=HEADERS, json=payload)
+    return response.json()
 
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    result = None
     if request.method == "POST":
         email_text = request.form["email_text"]
-        categoria, resposta = classificar_email(email_text)
-        return render_template("index.html", email=email_text, categoria=categoria, resposta=resposta)
-    return render_template("index.html")
+
+        output = query({"inputs": email_text})
+        prediction = output[0][0]  # Pega a 1ª classe
+
+        label = prediction["label"]
+        score = prediction["score"]
+
+        if "positive" in label.lower():
+            categoria = "produtivo"
+            resposta = "Esse e-mail parece importante. Vale a pena responder."
+        else:
+            categoria = "improdutivo"
+            resposta = "Esse e-mail não é produtivo. Pode ser ignorado ou marcado."
+
+        result = {
+            "email": email_text,
+            "categoria": categoria,
+            "score": round(score, 3),
+            "resposta": resposta,
+        }
+
+    return render_template("index.html", result=result)
 
 
 if __name__ == "__main__":
