@@ -31,8 +31,9 @@ cd Classificador-email
 ### 2 Criar ambiente virtual (opcional, mas recomendado)
 
 python -m venv venv
-source venv/bin/activate    Linux/Mac
-venv\Scripts\activate       Windows
+source venv/bin/activate     Linux/Mac
+
+venv\Scripts\activate        Windows
 
 
 ### 3 Instalar dependências
@@ -43,8 +44,9 @@ pip install -r requirements.txt
 ### 4 Configurar Token da Hugging Face
 No terminal:
 
-export HF_TOKEN=seu_token_aqui      Linux/Mac
-set HF_TOKEN=seu_token_aqui         Windows PowerShell
+export HF_TOKEN=seu_token_aqui       Linux/Mac
+
+set HF_TOKEN=seu_token_aqui          Windows PowerShell
 
 '''Obs: (Configure o Token do Hugging Face
 
