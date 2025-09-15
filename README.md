@@ -8,6 +8,8 @@ Aplicação web que utiliza **Inteligência Artificial** (Hugging Face API) para
 
 Além disso, o sistema sugere automaticamente uma resposta ao e-mail analisado.  
 
+Acesse via web https://classificador-email-8t1f.onrender.com/
+
 ---
 
 ## 🚀 Tecnologias Utilizadas
