@@ -1,53 +1,52 @@
-📧 Classificador de E-mails
+# 📧 Classificador de E-mails  
 
-Aplicação web que utiliza Inteligência Artificial (Hugging Face API) para classificar e-mails como:
+Aplicação web que utiliza **Inteligência Artificial** (Hugging Face API) para classificar e-mails como:  
 
-✅ Produtivo
+- ✅ **Produtivo**  
+- ⚠️ **Improdutivo**  
+- ❌ **Erro**  
 
-⚠️ Improdutivo
+Além disso, o sistema sugere automaticamente uma resposta ao e-mail analisado.  
 
-❌ Erro
+---
 
-E sugere automaticamente uma resposta ao e-mail analisado.
+## 🚀 Tecnologias Utilizadas
+- 🐍 **Python 3**  
+- 🌐 **Flask**  
+- 🤗 **Hugging Face Inference API**  
+- 🎨 **Bootstrap 5**  
 
-🚀 Tecnologias
+---
 
-Python 3
+## ▶️ Como rodar localmente  
 
-Flask
+### 1. 📂 Clonar o repositório
 
-Hugging Face Inference API
-
-Bootstrap 5
-
-
-▶️ Como rodar localmente
-
-Clonar o repositório
+Bash
 
 git clone https://github.com/seu-usuario/Classificador-email.git
+
 cd Classificador-email
 
-
-Criar ambiente virtual (opcional, mas recomendado)
+### 2 Criar ambiente virtual (opcional, mas recomendado)
 
 python -m venv venv
 source venv/bin/activate    Linux/Mac
 venv\Scripts\activate       Windows
 
 
-Instalar dependências
+### 3 Instalar dependências
 
 pip install -r requirements.txt
 
 
-Configurar Token da Hugging Face
+### 4 Configurar Token da Hugging Face
 No terminal:
 
 export HF_TOKEN=seu_token_aqui      Linux/Mac
 set HF_TOKEN=seu_token_aqui         Windows PowerShell
 
-Obs: (Configure o Token do Hugging Face
+'''Obs: (Configure o Token do Hugging Face
 
 Você precisa de um token válido para acessar a API:
 
@@ -57,9 +56,9 @@ Vá em Settings > Access Tokens
 
 Gere um token de leitura
 
-Configure-o no terminal: )
+Configure-o no terminal: )'''
 
-Executar aplicação
+### 5 Executar aplicação
 
 python app.py
 
