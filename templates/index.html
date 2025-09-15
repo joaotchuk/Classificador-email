@@ -27,10 +27,17 @@
         .produtivo {
             background-color: #d4edda;
             color: #155724;
+            border: 1px solid #c3e6cb;
         }
         .improdutivo {
             background-color: #f8d7da;
             color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .indefinido {
+            background-color: #e2e3e5;
+            color: #383d41;
+            border: 1px solid #d6d8db;
         }
     </style>
 </head>
@@ -52,7 +59,15 @@
                 <h5>Email analisado:</h5>
                 <p>{{ email }}</p>
 
-                <div class="resultado {% if categoria == 'Produtivo' %}produtivo{% else %}improdutivo{% endif %}">
+                <div class="resultado 
+                    {% if categoria == 'Produtivo' %}
+                        produtivo
+                    {% elif categoria == 'Improdutivo' %}
+                        improdutivo
+                    {% else %}
+                        indefinido
+                    {% endif %}
+                ">
                     Categoria: {{ categoria }}
                 </div>
 
